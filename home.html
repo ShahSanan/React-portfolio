@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(to right, #0066cc, #33ccff);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: rgba(0, 122, 204, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease, transform 0.5s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 122, 204, 0.8);
+            transform: translateY(-10px);
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ffcc00;
+            left: 0;
+            bottom: -5px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .navbar ul li a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .home {
+            text-align: center;
+            padding: 8rem 0; /* Adequate padding to avoid overlap with fixed navbar */
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .header {
+            background-color: #007acc;
+            color: white;
+            padding: 2rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .projects {
+            margin-top: 2rem;
+        }
+
+        .project-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0 auto;
+            position: relative;
+            left: 0%;
+
+
+        }
+
+        .project-card {
+            background: rgb(39, 39, 39);
+            position: relative;
+           
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            opacity: 0; /* Start invisible for fade-in */
+            animation: fadeInUp 0.5s forwards; /* Fade-in effect */
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+           /* Light background on hover */
+        }
+
+        .project-thumbnail {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-thumbnail {
+            transform: scale(1.05);
+        }
+
+        /* Testimonial Section Styles */
+        .testimonials {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial {
+            margin: 1rem 0;
+            font-style: italic;
+            color: #555;
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-2px); /* Subtle lifted effect */
+        }
+
+        .view-projects-button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-top: 20px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 16px;
+        }
+
+        .view-projects-button:hover {
+            background-color: #005f99; /* Darker shade on hover */
+            transform: scale(1.05);
+        }
+
+        /* Contact Section Styles */
+        .contact {
+            margin-top: 2rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #007acc;
+            outline: none;
+        }
+
+        .contact-form button {
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #005f99; /* Darker blue on hover */
+        }
+
+        /* Profile Picture Styles */
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: 20px auto;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 1200px) {
+            .project-card {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .project-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // NAVBAR COMPONENT
+        const Navbar = () => {
+            const [isScrolled, setIsScrolled] = React.useState(false);
+
+            React.useEffect(() => {
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 50);
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Me</a></li>
+                        <li><a href="/projects">Projects</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </nav>
+            );
+        };
+
+        const ProjectCard = ({ imgSrc, title, description }) => (
+            <div className="project-card">
+                <img src={imgSrc} alt={`${title} Thumbnail`} className="project-thumbnail" />
+                <h3>{title}</h3>
+                <p>{description}</p>
+            </div>
+        );
+
+        const Testimonials = () => (
+            <div className="testimonials">
+                <h2>What Others Say</h2>
+                <p className="testimonial">"An excellent developer! Highly recommend!" - Sundar Lal</p>
+                <p className="testimonial">"Very professional and skilled. God bless!" - Harsh Singh</p>
+                <p className="testimonial">"Very co-operative person with skills." - Matthew Hayden</p>
+            </div>
+        );
+
+        const Home = () => {
+            return (
+                <div className="home">
+                    <Navbar />
+                    <header className="header">
+                        <h1>Welcome to My Portfolio</h1>
+                        <p>Showcasing My Projects and Skills</p>
+                    </header>
+                    <section className="projects" id="projects">
+                        <h2>Featured Projects</h2>
+                        <div className="project-list">
+                            <ProjectCard imgSrc="/static/pthumb.jpeg" title="Budget Friendly Portfolio" description="A tight budget premium portfolio. Fully functional." />
+                            <ProjectCard imgSrc="/static/ethumb.jpeg" title="Small E-commerce Store" description="A small e-commerce store to sell editing presets. Fully functional with payment gateway." />
+                        </div>
+                        <a href="/projects">
+                            <button className="view-projects-button">View Projects</button>
+                        </a>
+                    </section>
+                    <Testimonials />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Home />);
+    </script>
+</body>
+</html>

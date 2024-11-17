@@ -1,0 +1,305 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{% static 'profile.jpg' %}" type="image/jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Sanan Shawkat</title>
+    <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #0066cc, #33ccff);
+            color: #fff;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        .navbar {
+            background: rgba(0, 122, 204, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ffcc00;
+            left: 0;
+            bottom: -5px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .navbar ul li a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* RESUME SECTION */
+        .resume-section {
+            padding: 4rem 2rem;
+            background: #004d99;
+            text-align: center;
+            margin: 4rem 0;
+            border-radius: 12px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .resume-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #ffcc00;
+            color: #004d99;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #ffaa00;
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255, 204, 0, 0.5);
+        }
+
+        /* PROJECTS SECTION */
+        .projects-section {
+            padding: 10rem 2rem;
+            background: linear-gradient(135deg, #33ccff 30%, #0099cc 70%);
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .projects-section h2 {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 3rem;
+        }
+
+        /* PROJECT CARDS */
+        .projects-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .project-card {
+            background-color: #004d99;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 20px;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* VIDEO HOVER EFFECT */
+        .project-video-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .project-video-container video {
+            width: 100%;
+            border-radius: 12px;
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .project-video-container:hover video {
+            filter: brightness(0.8);
+            transform: scale(1.05);
+        }
+
+        .project-description {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #fff;
+            text-align: justify;
+        }
+
+        /* MEDIA QUERIES */
+        @media (max-width: 1200px) {
+            .project-card {
+                width: 45%;
+                transform: translateY(0); /* Reset translate for smaller screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .projects-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .project-card {
+                width: 90%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // NAVBAR COMPONENT
+        const Navbar = () => (
+            <nav className="navbar">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Me</a></li>
+                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        );
+
+        // RESUME SECTION COMPONENT
+        const ResumeSection = () => (
+            <section className="resume-section">
+                <h2>Download My Resume</h2>
+                <a href="/static/resume.pdf" className="download-btn" download="Sanan_Shawkat_Resume.pdf">
+                    Download Resume
+                </a>
+            </section>
+        );
+
+        // PROJECT CARD COMPONENT
+        const ProjectCard = ({ title, videoSrc, description }) => (
+            <div className="project-card">
+                <div className="project-video-container">
+                    <video className="project-video" controls preload="metadata" poster="{% static 'video-placeholder.png' %}">
+                        <source src={videoSrc} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <h3>{title}</h3>
+                <p className="project-description">{description}</p>
+            </div>
+        );
+
+        // PROJECTS PAGE COMPONENT
+        const ProjectsPage = () => {
+            const projects = [
+                {
+                    title: "Budget-Friendly Portfolio",
+                    videoSrc: "{% static 'portfolio.mp4' %}",
+                    description: "A highly responsive portfolio built with React, Django, and CSS. It features advanced animations, fluid design, and a focus on performance."
+                },
+                {
+                    title: "Small E-Commerce Store",
+                    videoSrc: "{% static 'e-commerce.mp4' %}",
+                    description: "A fully functional, small-scale e-commerce store with a smooth UI, secure payment integration, and modern design. Made with ReactJs and is used to sell digital presets of editing softwares"
+                },
+                {
+                    title: "Restaurant Website",
+                    videoSrc: "{% static 'lounge.mp4' %}",
+                    description: "A fully functional, 2 page website for a restaurant. Capable of everything a website in this field should be of. Made with React.Js mainly. Automatic Email functionlity integrated"
+                }
+            ];
+
+            return (
+                <div className="projects-section">
+                    <h2>My Projects</h2>
+                    <div className="projects-container">
+                        {projects.map((project, index) => (
+                            <ProjectCard 
+                                key={index}
+                                title={project.title}
+                                videoSrc={project.videoSrc}
+                                description={project.description}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // APP COMPONENT
+        const App = () => (
+            <div>
+                <Navbar />
+                <ResumeSection />
+                <ProjectsPage />
+            </div>
+        );
+
+        // RENDER APP
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

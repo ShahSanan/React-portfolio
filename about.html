@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{% static 'profile.jpg' %}" type="image/jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Sanan Shawkat</title>
+    <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <style>
+        /* GENERAL STYLES */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(0, 122, 204, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #ffcc00;
+            left: 0;
+            bottom: -5px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .navbar ul li a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* ABOUT SECTION STYLES */
+        .about-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background-color: #e9eef4;
+        }
+
+        .about-section h2 {
+            font-size: 2.5rem;
+            color: #00a6ff;
+            margin-bottom: 2rem;
+        }
+
+        .about-content {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .about-card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1.5rem;
+            width: 300px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(0);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-card h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #007acc;
+        }
+
+        .about-card p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* PROFILE PICTURE */
+        .profile-pic-container {
+    position: relative;
+    width: 150px; /* Fixed width */
+    height: 150px; /* Fixed height */
+    overflow: hidden; /* Ensures no overflow */
+    border-radius: 50%; /* Makes it a circle */
+    margin-top: 20px;
+    margin-bottom: 29px;
+    left: 42%;
+    zoom: 135%;
+}
+
+.profile-pic {
+    width: 100%; /* 100% width to fit the container */
+    height: 100%; /* 100% height to fit the container */
+    object-fit: cover; /* Ensures the image covers the circle container without stretching */
+    border-radius: 50%; /* Ensures the image stays circular */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+   
+}
+
+.profile-pic:hover {
+    transform: scale(1.1); /* Enlarge slightly on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Adds a shadow effect on hover */
+}
+
+
+        /* MEDIA QUERIES */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+
+            .about-card {
+                width: 90%;
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // NAVBAR COMPONENT
+        const Navbar = () => (
+            <nav className="navbar">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Me</a></li>
+                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        );
+
+        const AboutCard = ({ title, content }) => (
+            <div className="about-card">
+                <h3>{title}</h3>
+                <p>{content}</p>
+            </div>
+        );
+
+        const AboutMe = () => (
+            <div className="about-section" id="about">
+                <div className="profile-pic-container">
+                    <img src="/static/profile.jpg" alt="Sanan Shawkat" className="profile-pic" />
+                </div>
+                <h2>About Sanan Shawkat</h2>
+                <div className="about-content">
+                    <AboutCard 
+                        title="Who Am I?" 
+                        content="I'm Sanan Shawkat, a fullstack web developer from Kashmir. I specialize in creating dynamic, engaging websites with a focus on functionality and design." 
+                    />
+                    <AboutCard 
+                        title="My Journey" 
+                        content="From learning web development through Harvard's CS50W course to freelancing on Fiverr, I’ve built a solid foundation in technologies like Django, React, JavaScript, Python, and security best practices." 
+                    />
+                    <AboutCard 
+                        title="Expertise" 
+                        content="I have experience with HTML, CSS, JavaScript, Python, SQL, Django, and React. I specialize in creating secure and optimized websites that meet client needs efficiently." 
+                    />
+                    <AboutCard 
+                        title="What I Love" 
+                        content="I enjoy turning complex ideas into functional, beautiful websites. I love working on projects that challenge me to grow and improve." 
+                    />
+                    <AboutCard 
+                        title="My Projects" 
+                        content="Some of my favorite projects include a budget-friendly portfolio and a small e-commerce store, both showcasing my ability to design on tight budgets while maintaining functionality." 
+                    />
+                </div>
+            </div>
+        );
+
+        const App = () => (
+            <div>
+                <Navbar />
+                <AboutMe />
+            </div>
+        );
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
